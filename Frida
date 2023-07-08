@@ -1,0 +1,378 @@
+import speech_recognition as sr
+import pyttsx3
+import wikipedia
+import webbrowser
+import datetime
+import requests
+import smtplib
+import webbrowser as wb
+import os
+import numpy as np
+import sounddevice
+import time
+import requests
+from bs4 import BeautifulSoup
+import pyautogui
+import pywhatkit as pwt
+import translators as ts
+import cv2
+from googlesearch import search
+
+
+engine=pyttsx3.init()
+voices=engine.getProperty("voices")
+voice_id="HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0"
+engine.setProperty("voice",voice_id)
+engine.runAndWait()
+
+engine=pyttsx3.init()
+engine.runAndWait()
+
+def takecommand():
+    r=sr.Recognizer()
+    with sr.Microphone() as source:
+        audio=r.listen(source)
+
+    try:
+        query=r.recognize(audio)
+        print(query)
+    except:
+      return "None"
+    return query
+
+def Taskexecution():
+    speak()
+    while True:
+        query=takecommand().lower()
+        print(query)
+
+
+        if "hey jarvis are u there" in query:
+            engine.say("always at your service sir")
+            print("always at your service sir")
+            engine.runAndWait()
+                    
+        elif "wikipedia" in query:
+            try:
+                engine.say("getting informations")
+                query=query.replace("wikipedia","")
+                results=wikipedia.summary(query,sentences=2)
+                print(results)
+                engine.say("search result is")
+                engine.say(results)
+                engine.say(results)
+                engine.runAndWait()
+            except:
+                engine.say("sorry sir can't find the exact results")
+                engine.runAndWait()
+
+        elif "search" in query:
+            q=query
+            wb.open_new(q)
+
+        elif "what" in query:
+            try:
+                engine.say("getting informations")
+                query=query.replace("what","")
+                results=wikipedia.summary(query,sentences=2)
+                print(results)
+                engine.say("search result is")
+                engine.say(results)
+                engine.runAndWait()
+            except:
+                engine.say("sorry sir can't find the exact results")
+                engine.runAndWait()
+
+        elif "who" in query:
+            try:
+                engine.say("getting informations")
+                query=query.replace("who","")
+                results=wikipedia.summary(query,sentences=2)
+                print(results)
+                engine.say("search result is")
+                engine.say(results)
+                engine.runAndWait()
+            except:
+                engine.say("sorry sir can't find the exact results")
+                engine.runAndWait()
+
+        elif "none" in query:
+            print("ok")
+                
+
+        elif "speak" in query:
+            engine.say("searching in wikipedia")
+            query=query.replace("speak","")
+            results=wikipedia.summary(query,sentences=2)
+            print(results)
+            engine.say(results)
+            engine.runAndWait()
+
+        elif "translate" in query:
+            q=query
+            a=q
+            b=ts.google(a,from_language="en",to_language=input("enter the language to translate:"))
+            print(b)
+            engine.say(b)
+                   
+        elif "play" in query:
+            engine.say("as you wish")
+            engine.runAndWait()
+            q=query
+            pwt.playonyt(q)
+
+        elif "open" in query:
+            from googlesearch import search
+            q=query
+            if q=="open importance" or q=="open impetus":
+                a="impartus"
+            else:
+                a=q
+            for j in search(a, tld="co.in", num=1, stop=1, pause=2):
+                print(j)
+            wb.open_new(j)
+
+        elif "password" in query:
+            print("suryarajanthiagarajan11@gmail.com")
+            print("Jnd5vyOH")
+
+
+        elif "video" in query:
+            video=cv2.VideoCapture(0)
+            fourcc=cv2.VideoWriter_fourcc(*'xvid')
+            out=cv2.VideoWriter("recording1.avi",fourcc,20.0,(640,480))
+
+            while True:
+                a,frame=video.read()
+                if(a==True):
+                    out.write(frame)
+                    cv2.imshow('capturing',frame)
+                    k=cv2.waitKey(50)
+                    if cv2.waitKey(50)== ord('q'):
+                        break
+            video.release()
+            cv2.destroyAllWindows()
+
+        elif "voice" in query:
+            q=query
+            a=q
+            print(a)
+            fs=44100
+            second=int(input("enter time"))
+            print("recording.....")
+            engine.say("recording.....")
+            engine.runAndWait()
+            record_voice=sounddevice.rec(int(second*fs),samplerate=fs,channels=2)
+            sounddevice.wait()
+            write(a,fs,record_voice)
+            print("audio is recorded sir")
+            engine.say("audio is recorded sir")
+            engine.runAndWait()
+
+        elif "temperature" in query:
+            q=query
+            search=q
+            url=f"https://www.google.com/search?q={search}"
+            r=requests.get(url)
+            data=BeautifulSoup(r.text,"html.parser")
+            info=data.find("div",class_="BNeawe").text
+            print(f"{search} is {info}")
+            engine.say(f"{search} is {info}")
+            engine.runAndWait()
+
+        elif "how" in query:
+            q=query
+            search=q
+            url=f"https://www.google.com/search?q={search}"
+            r=requests.get(url)
+            data=BeautifulSoup(r.text,"html.parser")
+            info=data.find("div",class_="BNeawe").text
+            print(info)
+            engine.say(info)
+            engine.runAndWait()
+
+        elif "how to" in query:
+            q=query
+            how=q
+            max_results=1
+            how_to=search_wikihow(how,max_results)
+            assert len(how_to)==1
+            how_to[0].print()
+            engine.say(how_to[0].summary)
+            engine.runAndWait()
+
+        elif "gmail" in query:
+            engine.say("openig gmail")
+            print("opening gmail")
+            engine.runAndWait()
+            wb.open_new(r"https://mail.google.com/mail/u/0/#inbox")
+
+        elif "good morning" in query:
+            engine.say("good morning")
+            print("good morning")
+            engine.runAndWait()
+
+        elif "good afternoon" in query:
+             engine.say("good afternoon")
+             print("good afternoon")
+             engine.runAndWait()
+
+        elif "good evening" in query:
+            engine.say("good evening")
+            print("good evening")
+            engine.runAndWait()
+            
+        elif "good night" in query:
+            engine.say("good night")
+            print("good night")
+            engine.runAndWait()
+
+        elif "up" in query:
+            pyautogui.press("volumeup")
+
+        elif "down" in query:
+            pyautogui.press("volumedown")
+
+        elif "new" in query or "shut up" in query:
+            pyautogui.press("volumemute")
+
+        elif "mute" in query:
+            pyautogui.press("volumemute")
+
+        elif "time" in query:
+            time=datetime.datetime.now().strftime('%H:%M:%S:%p')
+            print(time)
+            engine.say(time)
+            engine.runAndWait()
+
+        elif "tell me my name" in query:
+            f=open("surya.txt","r")
+            print("name of the file",f.name)
+            str=f.read()
+            print(str)
+            engine.say(str)
+            engine.runAndWait()
+            print("success")
+            f.close()
+
+        elif "change my name" in query:
+            f=open("surya.txt","w")
+            f.write(input("enter your likeable name:"))
+            str=f.read()
+            print(str)
+            f.close()
+            engine.say("name is changed successfully")
+            engine.runAndWait()
+
+        elif "special" in query:
+            f=open("F:/special.txt","r")
+            print("name of the file",f.name)
+            str=f.read()
+            print(str)
+            engine.say(str)
+            engine.runAndWait()
+            f.close()
+            print("success")
+            
+        elif "your name" in query:
+            print("baymax")
+            engine.say("baymax")
+            engine.runAndWait()
+
+        elif "hey" in query:
+            engine.say("hi boss")
+            print("hi boss")
+            engine.runAndWait()
+
+        elif "date" in query:
+            tdate=datetime.date.today()
+            print(tdate)
+            engine.say(tdate)
+            engine.runAndWait()
+
+        elif "hi" in query:
+            engine.say("hi boss")
+            print("hi boss")
+            engine.runAndWait()
+        
+        elif "not so well" in query:
+            engine.say("that's ok boss chill")
+            print("that's ok boss chill")
+            engine.runAndWait()
+            
+        elif "how are you" in query:
+            engine.say("i'm fine how are you")
+            print("i'm fine how are you")
+            engine.runAndWait()
+
+
+        elif "i am fine" in query:
+            engine.say("thats good to hear from u boss")
+            print("thats good to hear from u boss")
+            engine.runAndWait()
+            
+        elif "thankyou" in  query:
+            engine.say("it's always a pleasure to work with you boss")
+            print("it's always a pleasure to work with you boss")
+            engine.runAndWait()
+            
+        elif "message to father" in query or "send message to father" in query:
+            server=smtplib.SMTP_SSL('smtp.gmail.com',465)
+            q=query
+            send="suryarajan63_ec@mepcoeng.ac.in"
+            password="pansy1977"
+            rec=("thiagarajanr859@gmail.com")
+            msg=(q)
+            server.login(send,password)
+            server.sendmail(send,
+                            rec,
+                            msg)
+            print('success')
+            server.quit()
+
+        elif "message to mother" in query or "send message to mother" in query:
+            server=smtplib.SMTP_SSL('smtp.gmail.com',465)
+            q=query
+            send="suryarajan63_ec@mepcoeng.ac.in"
+            password="pansy1977"
+            rec=("m.pansy1976@gmail.com")
+            msg=(q)
+            server.login(send,password)
+            server.sendmail(send,
+                            rec,
+                            msg)
+            print('success')
+            server.quit()
+
+        elif "off" in query or "close" in query:
+            pwt.shutdown(time=30)
+
+        elif "cancel close" in query:
+            pwt.cancelShutdown()
+
+        else:
+            try:
+                engine.say("getting informations")
+                query=query.replace("what","")
+                results=wikipedia.summary(query,sentences=2)
+                print(results)
+                engine.say("search result is")
+                engine.say(results)
+                engine.runAndWait()
+            except:
+                engine.say("sorry sir can't find the exact results")
+                engine.runAndWait()
+
+
+
+if __name__=="__main__":
+    while True:
+        query=takecommand()
+        if "Liza" in query:
+            Taskexecution()
+        elif "wake up" in query:
+            Taskexecution()
+        elif "" in query:
+            time.sleep(3)
+        elif "wait" in query:
+            time.sleep(3)
