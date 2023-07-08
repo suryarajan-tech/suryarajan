@@ -1,0 +1,137 @@
+import json
+import re
+import time
+
+time=time.ctime()
+
+def load_json(file):
+    with open(file) as bot_response:
+        print(f"Loaded '{file}' successfully")
+        return json.load(bot_response)
+
+responses_data=load_json("memory.json")
+
+def get_response(input_string):
+    split_message=re.split(r'\s+|[,;?!.-]\s*',input_string.lower())
+    score_list=[]
+
+    for response in responses_data:
+        response_score=0
+        required_score=0
+        required_words=response["required_words"]
+
+        if required_words:
+            for word in split_message:
+                if word in required_words:
+                    required_score+=1
+
+        if required_score==len(required_words):
+            for word in split_message:
+                if word in response["user_input"]:
+                    response_score+=1
+
+        score_list.append(response_score)
+    best_response=max(score_list)
+    response_index=score_list.index(best_response)
+
+    if input_string=="":
+        return "pls type"
+
+    if best_response!=0:
+        response_score=0
+        return responses_data[response_index]["bot_response"]
+
+    return random_responses.random_string()
+
+    if search in input_string:
+        search=input_string
+        url=f"https://www.google.com/search?q={search}"
+        r=requests.get(url)
+        data=BeautifulSoup(r.text,"html.parser")
+        info=data.find("div",class_="BNeawe").text
+        print(f"{search} is {info}")
+
+    if time in input_string:
+        print(time)
+
+while True:
+    user_input=input("you:")
+    print("FRIDA:",get_response(user_input))
+
+Json file:
+[
+    {"response_type":"greeting",
+     "user_input":["hi","hey","hello"],
+     "bot_response":["hey again"],
+     "required_words":[]
+     },
+    {"response_type":"greeting",
+     "user_input":["how","are"],
+     "bot_response":["i am fine"],
+     "required_words":["how"]
+     },
+    {"response_type":"goodbye",
+     "user_input":["bye","see","you","later"],
+     "bot_response":["bye-bye"],
+     "required_words":["bye"]
+     },
+    {"response_type":"open",
+     "user_input":["when","open"],
+     "bot_response":["we are always open"],
+     "required_words":["when"]
+     },
+    {"response_type":"problem",
+     "user_input":["problem","problems"],
+     "bot_response":["please give us a brief of your problems remember while after saying your problem tell me this is the situation after the statement"],
+     "required_words":["problem","problems"]
+     },
+     {"response_type":"answerin",
+     "user_input":["situation","situations"],
+     "bot_response":["we'll definitely look into the problem"],
+     "required_words":["situation","situations"]
+     },
+    {"response_type":"thanking",
+     "user_input":["thankyou"],
+     "bot_response":["you are welcome thankyou for using me"],
+     "required_words":["thankyou"]
+     },
+    {"response_type":"thankings",
+     "user_input":["thank","you"],
+     "bot_response":["you are welcome thankyou for using me"],
+     "required_words":["thank"]
+     },
+     {
+     "response_type":"think",
+     "user_input":["who","what"],
+     "bot_response":["i am an AI induced chatbot"],
+     "required_words":["what","who"]
+     },
+     {
+     "response_type":"name",
+     "user_input":["name"],
+     "bot_response":["i am Frida"],
+     "required_words":["name"]
+     },
+     {
+     "response_type":"studying",
+     "user_input":["studying"],
+     "bot_response":["That's great than i thought"],
+     "required_words":["studying"]
+     }
+     
+    ]
+ random responses:
+import random
+def random_string():
+    random_list=[
+        "please try something more descriptive",
+        "do you mind trying to rephrasse that",
+        "i don't think i understand that",
+        "can you say that again",
+        ]
+    list_count=len(random_list)
+    random_item=random.randrange(list_count)
+    return random_list[random_item]
+
+print(random_string())
+
