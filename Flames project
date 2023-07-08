@@ -1,5 +1,5 @@
 from collections import Counter
-flames = ["lesbian","sex","Friends","Love","Affection","Marriage","Enemy","Siblings"]
+flames = ["Friends","Love","Affection","Marriage","Enemy","Siblings"]
 a=input("enter your name: ")
 b=input("enter your crush's name: ")
 c=list(a)
