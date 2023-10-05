@@ -121,5 +121,5 @@ while(1):
     if "student_classname" in s:
         c.student_classname()
 
-    if "quit out" in s:
+    if "quit" in s:
         c.quit()
