@@ -100,8 +100,8 @@ def virtual_classroom():
 
     virtual_classroom = VirtualClassroom()
     root.mainloop()
-
-# Create a login window
+    
+# login window
 login_window = tk.Tk()
 login_window.title("Login")
 username_label = tk.Label(login_window, text="Username:")
