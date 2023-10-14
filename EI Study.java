@@ -1,6 +1,5 @@
 import java.util.*;
 
-// Define Student class to represent students
 class Student {
     private String name;
     private String classroomName;
@@ -19,7 +18,6 @@ class Student {
     }
 }
 
-// Define Classroom class to represent classrooms
 class Classroom {
     private String name;
     private List<Student> students;
@@ -50,6 +48,7 @@ class Classroom {
     public List<String> getAssignments() {
         return assignments;
     }
+    
 }
 
 // VirtualClassroom class to manage classrooms and students
@@ -103,34 +102,68 @@ public class VirtualClassroom {
             }
         }
     }
-
-    // Implement submitAssignment and other methods similarly
-
-    public static void main(String[] args) {
-        VirtualClassroom virtualClassroom = new VirtualClassroom();
-        Scanner scanner = new Scanner(System.in);
-
-        while (true) {
-            String[] input = scanner.nextLine().split(" ");
-            if ("add_classroom".equals(input[0])) {
-                virtualClassroom.addClassroom(input[1]);
-            } else if ("list_classroom".equals(input[0])) {
-                virtualClassroom.listClassrooms();
-            } else if ("student_add".equals(input[0])) {
-                virtualClassroom.addStudent(input[1], input[2]);
-            } else if ("list_student".equals(input[0])) {
-                virtualClassroom.listStudents();
-            } else if ("schedule_assignment".equals(input[0])) {
-                virtualClassroom.scheduleAssignment(input[1], input[2]);
-            } else if ("submit_assignment".equals(input[0])) {
-                // Implement submit_assignment
-            } else if ("remove_classroom".equals(input[0])) {
-                // Implement remove_classroom
-            } else if ("student_classname".equals(input[0])) {
-                // Implement student_classname
-            } else if ("out".equals(input[0])) {
-                System.exit(0);
+    public void submitAssignment(String studentName, String assignmentName) {
+    for (Classroom classroom : classrooms) {
+        for (Student student : classroom.getStudents()) {
+            if (student.getName().equals(studentName)) {
+                List<String> assignments = classroom.getAssignments();
+                if (assignments.contains(assignmentName)) {
+                    System.out.println(studentName + " submitted assignment: " + assignmentName);
+                } else {
+                    System.out.println("Assignment not found in the classroom.");
+                }
+                return;
             }
         }
     }
+    System.out.println("Student not found.");
+}
+
+public void removeClassroom(int index) {
+    if (index >= 0 && index < classrooms.size()) {
+        classrooms.remove(index);
+        System.out.println("Classroom removed.");
+    } else {
+        System.out.println("Invalid index for removing a classroom.");
+    }
+}
+
+public String getStudentClassroom(String studentName) {
+    for (Classroom classroom : classrooms) {
+        for (Student student : classroom.getStudents()) {
+            if (student.getName().equals(studentName)) {
+                return classroom.getName();
+            }
+        }
+    }
+    return "Student not found.";
+}
+
+
+public static void main(String[] args) {
+    VirtualClassroom virtualClassroom = new VirtualClassroom();
+    Scanner scanner = new Scanner(System.in);
+
+    while (scanner.hasNextLine()) { // Check if there's more input
+        String[] input = scanner.nextLine().split(" ");
+        if ("add_classroom".equals(input[0])) {
+            virtualClassroom.addClassroom(input[1]);
+        } else if ("list_classroom".equals(input[0])) {
+            virtualClassroom.listClassrooms();
+        } else if ("student_add".equals(input[0])) {
+            virtualClassroom.addStudent(input[1], input[2]);
+        } else if ("list_student".equals(input[0])) {
+            virtualClassroom.listStudents();
+        } else if ("schedule_assignment".equals(input[0])) {
+            virtualClassroom.scheduleAssignment(input[1], input[2]);
+        } else if ("submit_assignment".equals(input[0])) {
+            virtualClassroom.submitAssignment(input[1], input[2]);
+        } else if ("remove_classroom".equals(input[0])) {
+            virtualClassroom.removeClassroom(Integer.parseInt(input[1]));
+        } else if ("student_classname".equals(input[0])) {
+            String classroom = virtualClassroom.getStudentClassroom(input[1]);
+            System.out.println(classroom);
+        } 
+    }
+}
 }
